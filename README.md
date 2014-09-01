@@ -13,6 +13,11 @@ Everything is just planned and open for discussion.
  * The App will constist of multiple parts: REST API and Web UI
  * An Android app is also planned
 
+Mockups
+-------
+
+mockup.epz is a rough draft of the UI. It was done using http://pencil.evolus.vn/
+
 Planned REST-API
 ----------------
 Assuming Accept-header "application/json". If none is given, html is 
