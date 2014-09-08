@@ -12,3 +12,5 @@ pom.xml.asc
 /.lein-env
 /checkouts
 /.env
+.idea/
+*.iml
