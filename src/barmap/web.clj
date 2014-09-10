@@ -1,15 +1,18 @@
 (ns barmap.web
-  (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
-            [compojure.handler :refer [site]]
-            [compojure.route :as route]
-            [clojure.java.io :as io]
-            [ring.middleware.stacktrace :as trace]
-            [ring.middleware.session :as session]
-            [ring.middleware.session.cookie :as cookie]
-            [ring.adapter.jetty :as jetty]
-            [ring.middleware.basic-authentication :as basic]
-            [cemerick.drawbridge :as drawbridge]
-            [environ.core :refer [env]]))
+  (:use [compojure.core]
+        [ring.util.response]
+        [ring.middleware.format-response])
+  (:require
+    [compojure.handler :as handler]
+    [compojure.route :as route]
+    [clojure.java.io :as io]
+    [ring.middleware.stacktrace :as trace]
+    [ring.middleware.session :as session]
+    [ring.middleware.session.cookie :as cookie]
+    [ring.adapter.jetty :as jetty]
+    [ring.middleware.basic-authentication :as basic]
+    [cemerick.drawbridge :as drawbridge]
+    [environ.core :refer [env]]))
 
 (defn- authenticated? [user pass]
   ;; TODO: heroku config:add REPL_USER=[...] REPL_PASSWORD=[...]
@@ -20,23 +23,29 @@
       (session/wrap-session)
       (basic/wrap-basic-authentication authenticated?)))
 
-(defroutes app
-  (ANY "/repl" {:as req}
-       (drawbridge req))
-  (GET "/" []
-       {:status 200
-        :headers {"Content-Type" "text/plain"}
-        :body (pr-str ["Hello" :from 'Heroku])})
-  (ANY "*" []
-       (route/not-found (slurp (io/resource "404.html")))))
 
 (defn wrap-error-page [handler]
   (fn [req]
     (try (handler req)
          (catch Exception e
-           {:status 500
+           {:status  500
             :headers {"Content-Type" "text/html"}
-            :body (slurp (io/resource "500.html"))}))))
+            :body    (slurp (io/resource "500.html"))}))))
+
+(defroutes app
+           (context "/api" []
+                    (OPTIONS "/" []
+                             (->
+                               (response {:version "0.1.0-SNAPSHOT"})
+                               (header "Allow" "OPTIONS"))))
+          (ANY "/repl" {:as req}
+                (drawbridge req))
+           (GET "/" []
+                {:status  200
+                 :headers {"Content-Type" "text/plain"}
+                 :body    (pr-str ["Hello" :from 'Heroku])})
+           (ANY "*" []
+                (route/not-found (slurp (io/resource "404.html")))) )
 
 (defn wrap-app [app]
   ;; TODO: heroku config:add SESSION_SECRET=$RANDOM_16_CHARS
@@ -45,7 +54,8 @@
         ((if (env :production)
            wrap-error-page
            trace/wrap-stacktrace))
-        (site {:session {:store store}}))))
+        (wrap-restful-response)
+          (handler/site {:session {:store store}}))))
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
