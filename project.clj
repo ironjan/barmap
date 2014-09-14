@@ -13,8 +13,10 @@
                  [org.clojure/java.jdbc "0.3.2"]
                  [postgresql "9.1-901.jdbc4"]
                  [hiccup "1.0.4"]
-                 [ring-middleware-format "0.2.2"]]
-  :main barmap.web/-main
+                 [ring-middleware-format "0.2.2"]
+                 [lobos "1.0.0-beta3"]
+                 [postgresql "9.3-1102.jdbc41"]]
+  :main barmap.web
   :min-lein-version "2.0.0"
   :plugins [[environ/environ.lein "0.2.1"]]
   :hooks [environ.leiningen.hooks]
