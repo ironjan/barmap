@@ -12,6 +12,7 @@
     [ring.adapter.jetty :as jetty]
     [ring.middleware.basic-authentication :as basic]
     [cemerick.drawbridge :as drawbridge]
+    [barmap.controllers.api :as apiController]
     [environ.core :refer [env]]))
 
 (defn- authenticated? [user pass]
@@ -33,11 +34,7 @@
             :body    (slurp (io/resource "500.html"))}))))
 
 (defroutes app
-           (context "/api" []
-                    (OPTIONS "/" []
-                             (->
-                               (response {:version "0.1.0-SNAPSHOT"})
-                               (header "Allow" "OPTIONS"))))
+           apiController/routes
           (ANY "/repl" {:as req}
                 (drawbridge req))
            (GET "/" []
