@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [alter drop
                             bigint boolean char double float time])
   (:use (lobos [migration :only [defmigration]] core schema
-               config helpers)))
+               config helpers))
+  (:require [clojure.java.jdbc :as sql]))
 
 
 (defmigration add-places-table
@@ -19,3 +20,11 @@
                                   (refer-to :types))))
               (down [] (drop (table :places) :cascade)
                     (drop (table :types) :cascade)))
+
+(defmigration add-basic-types
+              (up [] (sql/insert! lobos.config/db :types
+                                  {:name "Bar"}
+                                  {:name "Pub"}
+                                  {:name "Take Away"} ))
+              (down [] (sql/delete! lobos.config/db :types [])))
+
