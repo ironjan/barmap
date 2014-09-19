@@ -1,1 +1,0 @@
-(ns barmap.controllers.places)
