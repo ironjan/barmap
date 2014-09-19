@@ -14,3 +14,7 @@ pom.xml.asc
 /.env
 .idea/
 *.iml
+.lobos_stash.clj
+.~lock.convertcsv.csv#
+pg/
+
