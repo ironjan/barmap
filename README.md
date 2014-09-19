@@ -31,6 +31,12 @@ PUT /: Declined
 PUT /{id} : Update location with {id}
 ```
 
+Test data
+=========
+Import the testdata using the following command in an psql-shell:
+```COPY places (name, lat,lon,special, description) FROM 
+'/abs/path/to/bars.csv' WITH DELIMITER ',' QUOTE '"' 
+CSV;```
 Lein Template
 =============
 
