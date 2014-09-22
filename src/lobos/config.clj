@@ -2,9 +2,15 @@
   (:use lobos.connectivity)
   (:require [heroku-database-url-to-jdbc.core :as heroku-url]))
 
-(def db (or (heroku-url/jdbc-connection-string (System/getenv "DATABASE_URL"))
-  {:classname "org.postgresql.Driver"
+(def db
+  {:classname   "org.postgresql.Driver"
    :subprotocol "postgresql"
-   :subname "//localhost:5432/barmap"}))
+   :dbname      (or (System/getenv "DB_DATABASE") "barmap")
+   :host        (or (System/getenv "DB_HOST") "localhost")
+   :port        (or (System/getenv "DB_PORT") 5432)
+   :user        (or (System/getenv "DB_USER") "")
+   :password    (or (System/getenv "DB_PASSWORD") "")
+   :sslfactory "org.postgresql.ssl.NonValidatingFactory"
+   :ssl true})
 
 (open-global db)
