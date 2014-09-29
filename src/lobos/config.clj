@@ -1,8 +1,11 @@
 (ns lobos.config
-  (:use lobos.connectivity))
+  (:use [lobos.connectivity]
+        [heroku-database-url-to-jdbc.core]))
 
-(def db           {:classname "org.postgresql.Driver"
-           :subprotocol "postgresql"
-           :subname "//localhost:5432/barmap"})
+(defn db [] (or (korma-connection-map (System/getenv "DATABASE_URL"))
+              {:classname   "org.postgresql.Driver"
+               :subprotocol "postgresql"
+               :subname     "//localhost:5432/barmap"}))
 
-(open-global db)
+(defn init []
+  (open-global (db)))
