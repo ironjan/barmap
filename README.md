@@ -33,10 +33,19 @@ PUT /{id} : Update location with {id}
 
 Test data
 =========
-Import the testdata using the following command in an psql-shell:
-```COPY places (name, lat,lon,special, description) FROM 
-'/abs/path/to/bars.csv' WITH DELIMITER ',' QUOTE '"' 
+
+First create a local postgres database called 'barmap' (createdb 
+barmap) and run in a ```lein repl```
+```
+(require 'lobos.migrations)
+(lobos.core/migrate)
+```
+If everything worked, the tables should be set up in your database.
+
+Then import the testdata using the following command in an psql-shell:
+```COPY places (name, lat,lon,url, special, description) FROM STDIN WITH DELIMITER ',' QUOTE '"' 
 CSV;```
+
 Lein Template
 =============
 
