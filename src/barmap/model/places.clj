@@ -6,4 +6,7 @@
   (into [] (sql/query (config/db) ["select * from places;"])))
 
 (defn allViaType [type]
-  (into [] (sql/query (config/db) ["select * from places where type_id = ?" type])))
+  (if (nil? type)
+    (all)
+    (into [] (sql/query (config/db)
+                        ["select * from places where type_id = ?" type]))))
