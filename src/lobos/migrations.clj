@@ -13,7 +13,7 @@
                                   (varchar :special 150)
                                   (double :lat)
                                   (double :lon)
-                                  (varchar :url 50)
+                                  (varchar :url 75)
                                   (varchar :tel 20)
                                   (boolean :freifunk )
                                   (check :name (> (length :name) 1))
