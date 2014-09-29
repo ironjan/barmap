@@ -22,10 +22,10 @@
                     (drop (table :types) :cascade)))
 
 (defmigration add-basic-types
-              (up [] (sql/insert! lobos.config/db :types
+              (up [] (sql/insert! (lobos.config/db) :types
                                   {:id 1 :name "Unknown"}
                                   {:name "Bar"}
                                   {:name "Pub"}
                                   {:name "Take Away"} ))
-              (down [] (sql/delete! lobos.config/db :types [])))
+              (down [] (sql/delete! (lobos.config/db) :types [])))
 
