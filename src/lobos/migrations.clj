@@ -23,9 +23,7 @@
 
 (defmigration add-basic-types
               (up [] (sql/insert! (lobos.config/db) :types
-                                  {:name "Unknown"}
                                   {:name "Bar"}
                                   {:name "Pub"}
                                   {:name "Take Away"} ))
               (down [] (sql/delete! (lobos.config/db) :types [])))
-
