@@ -16,7 +16,8 @@
                  [ring-middleware-format "0.2.2"]
                  [lobos "1.0.0-beta3"]
                  [postgresql "9.3-1102.jdbc41"]
-                 [heroku-database-url-to-jdbc "0.2.2"]]
+                 [heroku-database-url-to-jdbc "0.2.2"]
+                 [org.clojure/tools.nrepl "0.2.5"]]
   :main barmap.web
   :min-lein-version "2.0.0"
   :plugins [[environ/environ.lein "0.2.1"]]
