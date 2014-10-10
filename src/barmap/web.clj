@@ -1,7 +1,8 @@
 (ns barmap.web
   (:use [compojure.core]
         [ring.util.response]
-        [ring.middleware.format-response])
+        [ring.middleware.format-response]
+        [hiccup.core])
   (:require
     [compojure.handler :as handler]
     [compojure.route :as route]
@@ -13,7 +14,8 @@
     [ring.middleware.basic-authentication :as basic]
     [cemerick.drawbridge :as drawbridge]
     [barmap.controllers.api :as apiController]
-    [environ.core :refer [env]]))
+    [environ.core :refer [env]]
+    [barmap.model.places :as places]))
 
 (defn- authenticated? [user pass]
   ;; TODO: heroku config:add REPL_USER=[...] REPL_PASSWORD=[...]
@@ -35,14 +37,17 @@
 
 (defroutes app
            apiController/routes
-          (ANY "/repl" {:as req}
+           (ANY "/repl" {:as req}
                 (drawbridge req))
            (GET "/" []
-                {:status  200
-                 :headers {"Content-Type" "text/plain"}
-                 :body    (pr-str ["Hello" :from 'Heroku])})
+                (html
+                  [:html5
+                   [:body [:div#content
+                           [:ul#locationList
+                            (for [bar (places/all)]
+                              [:li (:name bar)])]]]]))
            (ANY "*" []
-                (route/not-found (slurp (io/resource "404.html")))) )
+                (route/not-found (slurp (io/resource "404.html")))))
 
 (defn wrap-app [app]
   ;; TODO: heroku config:add SESSION_SECRET=$RANDOM_16_CHARS
@@ -52,7 +57,7 @@
            wrap-error-page
            trace/wrap-stacktrace))
         (wrap-restful-response)
-          (handler/site {:session {:store store}}))))
+        (handler/site {:session {:store store}}))))
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
