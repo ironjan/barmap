@@ -17,5 +17,8 @@
   (first (sql/query (config/db)
                       ["select * from places where id = ?" (parse-int id)])))
 
-(defn create [bar]
+(defn create! [bar]
   (sql/insert! (config/db) :places bar))
+
+(defn delete! [id]
+  (sql/delete! (config/db) :places ["id = ?" (parse-int id)]))
