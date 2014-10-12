@@ -16,3 +16,6 @@
 (defn findById [id]
   (first (sql/query (config/db)
                       ["select * from places where id = ?" (parse-int id)])))
+
+(defn create [bar]
+  (sql/insert! (config/db) :places bar))
