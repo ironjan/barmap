@@ -39,13 +39,20 @@
            apiController/routes
            (ANY "/repl" {:as req}
                 (drawbridge req))
-           (GET "/" []
+           (GET "/bars" []
                 (html
                   [:html5
                    [:body [:div#content
                            [:ul#locationList
                             (for [bar (places/all)]
                               [:li (:name bar)])]]]]))
+           (GET "/bars/:id" [id]
+                (html
+                  [:html5
+                   [:body [:div#content
+                           [:h1 (:name (places/findById id))]
+                           ]]]))
+           (GET "/" [] (html [:html5 [:body [:div#content [:p "A simple landing page"]]]]))
            (ANY "*" []
                 (route/not-found (slurp (io/resource "404.html")))))
 

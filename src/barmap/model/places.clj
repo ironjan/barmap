@@ -10,3 +10,9 @@
     (all)
     (into [] (sql/query (config/db)
                         ["select * from places where type_id = ?" type]))))
+(defn parse-int [s]
+  (Integer/parseInt s))
+
+(defn findById [id]
+  (first (sql/query (config/db)
+                      ["select * from places where id = ?" (parse-int id)])))
