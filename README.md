@@ -1,6 +1,9 @@
 barmap
 ======
 
+**Not maintained. Reluctant to delete the code. https://github.com/codeforpb/Kneipenplan is a static
+barmap which does not support user submitted content (except for mail & Github issues).**
+
 A rewrite of https://fsmi.uni-paderborn.de/kneipenplan/ using Clojure to enable user submitted content.
 
 Plans
